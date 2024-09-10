@@ -1,5 +1,11 @@
-class ReimburseOverpayments
-  def self.call(amount, accounts)
+class Reimbursement < ApplicationRecord
+  belongs_to :org
+
+  attr_accessor :accounts
+
+  validates :amount, numericality: { greater_than: 0 }
+
+  after_create do
     PaymentGateway.send_payment(amount)
 
     Plutus::Entry.create!(

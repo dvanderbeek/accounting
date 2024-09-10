@@ -10,7 +10,8 @@ org = Org.create(name: "Example Org")
 # Debit Cash (increase its balance, since it's a normal debit account)
 # Credit Revenue (increase its balance, since it's normal credit account; eventually gets moved to retained earnings)
 cash = Plutus::Asset.create(name: "Cash", tenant: org)
-rewards = Plutus::Asset.create(name: "ETH (Validator Income)", tenant: org)
+# TODO: Create separate accounts for CL and EL Rewards & Income
+rewards = Plutus::Asset.create(name: "ETH (Validator Rewards)", tenant: org)
 ocb_eth = Plutus::Asset.create(name: "ETH (OCB)", tenant: org)
 validator_income = Plutus::Revenue.create(name: "Validator Income", tenant: org)
 service_fees = Plutus::Expense.create(name: "Validator Fees", tenant: org)
@@ -28,11 +29,13 @@ accounts = OpenStruct.new(
 
 subscription = Subscription.new(fee: 0.2)
 
-RecordReward.call(150, ocb_eth, accounts, subscription)
-RecordFeePayment.call(5, cash, accounts)
-RecordFeePayment.call(32, ocb_eth, accounts)
-RecordOcbPayout.call(118, accounts)
-ReimburseOverpayments.call(5, accounts)
+Reward.create!(amount: 150, paid_to: ocb_eth, accounts:, subscription:, org:)
+Reward.create!(amount: 250, paid_to: rewards, accounts:, subscription:, org:)
+FeePayment.create!(org_id: org.id, amount: 5, from_account: cash, accounts:)
+FeePayment.create!(org_id: org.id, amount: 32, from_account: ocb_eth, accounts:)
+OcbPayout.create!(amount: 118, accounts:, org:)
+Reimbursement.create(amount: [0, fee_overpayments.balance].max, org:, accounts:)
+FeePayment.create!(org_id: org.id, amount: 45, from_account: cash, accounts:)
 
 #############################################################################
 # Querying the data
@@ -53,32 +56,44 @@ fee_expenses = service_fees.balance(**args)
 # Total paid in excess of fee expense
 overpayments = fee_overpayments.debits_balance(**args)
 
-reimbursements = fee_overpayments.credits_balance(**args)
+# reimbursements = fee_overpayments.credits_balance(**args)
+reimbursements = Reimbursement.where(org:).sum(:amount)
+
+balance = accrued_service_fees.balance(**args)
 
 # Unreimbursed amount of overpayments
 # overpayments_owed = fee_overpayments.balance(**args)
 overpayments_owed = overpayments - reimbursements
 
 # Total fees (paid)
-fees_paid = fee_expenses + overpayments_owed
+fees_paid = FeePayment.where(org_id: org.id).sum(:amount)
 
 # Calculate Net Rewards (cash payouts)
 net_rewards_cash = gross_rewards_total - fees_paid
 
 # Calculate Net Rewards (rewards earned - fees accrued)
-# net_rewards = gross_rewards_total - fee_expenses
-net_rewards = net_rewards_cash + overpayments_owed
+net_rewards = gross_rewards_total - fee_expenses
+# net_rewards = net_rewards_cash + overpayments_owed - balance
 
 # Output the results
+puts "-------------------------------------------------"
+puts "-- Rewards Statement ----------------------------"
+puts "-------------------------------------------------"
 puts "Gross Rewards: #{gross_rewards_total}"
-puts "Fees Paid (gross): #{fee_expenses + overpayments}"
-puts "Overpayments Reimbursed: #{reimbursements}"
-puts "Fees Paid (net): #{fees_paid}"
-puts "Fees Accrued: #{fee_expenses}"
+puts "-------------------------------------------------"
+puts "Fees Accrued (For This Period): #{fee_expenses}"
+puts "Fees Paid (For This Period): #{fees_paid}"
+puts "-------------------------------------------------"
+puts "Overpayment: #{overpayments}"
+puts "-------------------------------------------------"
+puts "Reimbursements Paid: #{reimbursements}"
 puts "Reimbursement Owed: #{overpayments_owed}"
-puts "Net Rewards (cash): #{net_rewards_cash}"
-puts "Net Rewards: #{net_rewards}"
-puts "Overpayments (total, including reimbursed): #{overpayments}"
+puts "-------------------------------------------------"
+puts "Net Rewards (Received): #{net_rewards_cash}"
+puts "Net Rewards (Earned): #{net_rewards}"
+puts "-------------------------------------------------"
+puts "Balance Owed: #{balance}"
+puts "-------------------------------------------------"
 
 # Assets = Liabilities + Equity
 # expanded: Assets = Liabilities + Equity + Revenue - Expenses

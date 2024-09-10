@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_06_183416) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_10_153956) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "fee_payments", force: :cascade do |t|
+    t.string "org_id"
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ocb_payouts", force: :cascade do |t|
+    t.decimal "amount"
+    t.bigint "org_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["org_id"], name: "index_ocb_payouts_on_org_id"
+  end
 
   create_table "orgs", force: :cascade do |t|
     t.string "name"
@@ -52,4 +67,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_06_183416) do
     t.index ["date"], name: "index_plutus_entries_on_date"
   end
 
+  create_table "reimbursements", force: :cascade do |t|
+    t.bigint "org_id", null: false
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["org_id"], name: "index_reimbursements_on_org_id"
+  end
+
+  create_table "rewards", force: :cascade do |t|
+    t.decimal "amount"
+    t.bigint "org_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["org_id"], name: "index_rewards_on_org_id"
+  end
+
+  add_foreign_key "ocb_payouts", "orgs"
+  add_foreign_key "reimbursements", "orgs"
+  add_foreign_key "rewards", "orgs"
 end
