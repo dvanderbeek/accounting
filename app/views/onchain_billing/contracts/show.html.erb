@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @onchain_billing_contract %>
+
+<div>
+  <%= link_to "Edit this contract", edit_onchain_billing_contract_path(@onchain_billing_contract) %> |
+  <%= link_to "Back to contracts", onchain_billing_contracts_path %>
+
+  <%= button_to "Destroy this contract", @onchain_billing_contract, method: :delete %>
+</div>

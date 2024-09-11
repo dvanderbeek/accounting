@@ -1,0 +1,2 @@
+module OnchainBilling::ContractsHelper
+end

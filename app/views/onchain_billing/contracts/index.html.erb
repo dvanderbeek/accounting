@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Contracts</h1>
+
+<div id="onchain_billing_contracts">
+  <% @onchain_billing_contracts.each do |onchain_billing_contract| %>
+    <%= render onchain_billing_contract %>
+    <p>
+      <%= link_to "Show this contract", onchain_billing_contract %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New contract", new_onchain_billing_contract_path %>

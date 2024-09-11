@@ -1,0 +1,73 @@
+<div class="container pt-5">
+  <table class="table table-bordered table-striped shadow-sm rounded bg-white">
+    <thead class="thead-light">
+      <tr>
+        <th colspan="2" class="text-left h4">Rewards Statement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th colspan="2" class="bg-light">Gross Rewards</th>
+      </tr>
+      <tr>
+        <td class="font-weight-bold">Total Rewards Earned:</td>
+        <td><%= @statement.gross_rewards_total %></td>
+      </tr>
+      <tr>
+        <th colspan="2" class="bg-light">Fees</th>
+      </tr>
+      <tr>
+        <td>Fees Paid (For This Period):</td>
+        <td><%= @statement.fees_paid %></td>
+      </tr>
+      <tr>
+        <td>- Fees Accrued (For This Period):</td>
+        <td><%= @statement.fee_expenses %></td>
+      </tr>
+      <tr>
+        <td>= Overpayment:</td>
+        <td><%= @statement.overpayments %></td>
+      </tr>
+      <tr>
+        <td class="pl-4">Reimbursed:</td>
+        <td><%= @statement.reimbursements %></td>
+      </tr>
+      <tr>
+        <td class="pl-4">Reimbursements Owed:</td>
+        <td><%= @statement.overpayments_owed %></td>
+      </tr>
+      <tr>
+        <th colspan="2" class="bg-light">Net Rewards</th>
+      </tr>
+      <tr>
+        <td>Net Rewards (Received):</td>
+        <td><%= @statement.net_rewards_cash %></td>
+      </tr>
+      <tr>
+        <td>+ Reimbursements Owed:</td>
+        <td><%= @statement.overpayments_owed %></td>
+      </tr>
+      <tr>
+        <td>= Net Rewards (Earned):</td>
+        <td><%= @statement.net_rewards %></td>
+      </tr>
+      <tr>
+        <th colspan="2" class="bg-light">Balance</th>
+      </tr>
+      <tr>
+        <td>Balance Owed:</td>
+        <td><%= @statement.balance %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <div class="card-header">
+      OCB Contract
+    </div>
+
+    <div class="card-body">
+      <p class="card-text">Tab: <%= @ocb_contract.tab %></p>
+    </div>
+  </div>
+</div>

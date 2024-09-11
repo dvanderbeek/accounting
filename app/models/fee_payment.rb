@@ -1,9 +1,12 @@
 class FeePayment < ApplicationRecord
-  attr_accessor :from_account, :accounts
+  belongs_to :org
+
+  attr_accessor :from_account
 
   after_create do
     Plutus::Entry.create!(
-      description: "Pay Service Fees",
+      description: "Paid Service Fees",
+      date:,
       debits:,
       credits: [
         { amount: amount, account: from_account }
@@ -12,6 +15,10 @@ class FeePayment < ApplicationRecord
   end
 
   private
+
+  def accounts
+    org.accounts_by_name
+  end
 
   def accrued
     accounts.accrued_service_fees.balance

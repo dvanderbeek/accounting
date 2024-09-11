@@ -1,15 +1,14 @@
 class Reimbursement < ApplicationRecord
   belongs_to :org
 
-  attr_accessor :accounts
-
   validates :amount, numericality: { greater_than: 0 }
 
   after_create do
     PaymentGateway.send_payment(amount)
 
     Plutus::Entry.create!(
-      description: "Reimbursement of Overpayment",
+      description: "Reimbursement Paid",
+      date:,
       debits: [
         { amount: amount, account: accounts.rewards }
       ],
@@ -17,5 +16,11 @@ class Reimbursement < ApplicationRecord
         { amount: amount, account: accounts.fee_overpayments }
       ]
     )
+  end
+
+  private
+
+  def accounts
+    org.accounts_by_name
   end
 end

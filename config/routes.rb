@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :onchain_billing do
+    resources :contracts
+  end
+  get 'home/index'
   mount Plutus::Engine, at: "/plutus"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -7,5 +11,5 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "home#index"
 end

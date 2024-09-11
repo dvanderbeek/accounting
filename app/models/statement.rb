@@ -1,7 +1,7 @@
 class Statement
   include ActiveModel::Model
 
-  attr_accessor :start_date, :end_date, :accounts, :org
+  attr_accessor :start_date, :end_date, :org
 
   # Find the relevant accounts
   def args
@@ -23,11 +23,9 @@ class Statement
     accounts.fee_overpayments.debits_balance(**args)
   end
 
-  # def reimbursements
-  #   fee_overpayments.credits_balance(**args)
-  # end
   def reimbursements
-    Reimbursement.where(org:).sum(:amount)
+    # fee_overpayments.credits_balance(**args)
+    Reimbursement.where(org: org, date: (start_date..end_date)).sum(:amount)
   end
 
   def balance
@@ -35,16 +33,14 @@ class Statement
   end
 
   # Unreimbursed amount of overpayments
-  # def overpayments_owed
-  #   fee_overpayments.balance(**args)
-  # end
   def overpayments_owed
+    # fee_overpayments.balance(**args)
     overpayments - reimbursements
   end
 
   # Total fees (paid)
   def fees_paid
-    FeePayment.where(org_id: org.id).sum(:amount)
+    FeePayment.where(org: org, date: (start_date..end_date)).sum(:amount)
   end
 
   # Calculate Net Rewards (cash payouts)
@@ -55,7 +51,9 @@ class Statement
   # Calculate Net Rewards (rewards earned - fees accrued)
   def net_rewards
     gross_rewards_total - fee_expenses
+    # Plutus::Asset.where(tenant: org).balance(**args)
   end
+
   # net_rewards = net_rewards_cash + overpayments_owed - balance
 
   def print
@@ -76,5 +74,11 @@ class Statement
     puts "-------------------------------------------------"
     puts "Balance Owed: #{balance}"
     puts "-------------------------------------------------"
+  end
+
+  private
+
+  def accounts
+    org.accounts_by_name
   end
 end

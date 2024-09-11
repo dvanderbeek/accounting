@@ -1,11 +1,12 @@
 class Reward < ApplicationRecord
-  attr_accessor :accounts, :paid_to, :subscription
+  attr_accessor :paid_to, :subscription
 
   belongs_to :org
 
   after_create do
     Plutus::Entry.create!(
-      description: "Validator Reward",
+      description: "Validator Reward Earned",
+      date:,
       debits: [
         { amount: amount, account: paid_to }
       ],
@@ -15,7 +16,8 @@ class Reward < ApplicationRecord
     )
 
     Plutus::Entry.create!(
-      description: "Accrue Validator Fees",
+      description: "Service Fees Accrued",
+      date:,
       debits: [
         { amount: fee, account: accounts.service_fees }
       ],
@@ -23,9 +25,18 @@ class Reward < ApplicationRecord
         { amount: fee, account: accounts.accrued_service_fees }
       ]
     )
+
+    # Simulate the OCB Contract getting a payment
+    if paid_to.name == 'ocb_eth'
+      OnchainBilling::Contract.last.process_transfer(self)
+    end
   end
 
   private
+
+  def accounts
+    org.accounts_by_name
+  end
 
   # TODO: move this to a separate namespace
   def fee

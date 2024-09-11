@@ -10,15 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_10_153956) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_11_134152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "fee_payments", force: :cascade do |t|
-    t.string "org_id"
     t.decimal "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
+    t.bigint "org_id", null: false
+    t.index ["org_id"], name: "index_fee_payments_on_org_id"
   end
 
   create_table "ocb_payouts", force: :cascade do |t|
@@ -26,7 +28,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_10_153956) do
     t.bigint "org_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
     t.index ["org_id"], name: "index_ocb_payouts_on_org_id"
+  end
+
+  create_table "onchain_billing_contracts", force: :cascade do |t|
+    t.decimal "tab"
+    t.bigint "org_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["org_id"], name: "index_onchain_billing_contracts_on_org_id"
   end
 
   create_table "orgs", force: :cascade do |t|
@@ -72,6 +83,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_10_153956) do
     t.decimal "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
     t.index ["org_id"], name: "index_reimbursements_on_org_id"
   end
 
@@ -80,10 +92,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_10_153956) do
     t.bigint "org_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
     t.index ["org_id"], name: "index_rewards_on_org_id"
   end
 
+  add_foreign_key "fee_payments", "orgs"
   add_foreign_key "ocb_payouts", "orgs"
+  add_foreign_key "onchain_billing_contracts", "orgs"
   add_foreign_key "reimbursements", "orgs"
   add_foreign_key "rewards", "orgs"
 end

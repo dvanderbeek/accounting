@@ -1,0 +1,1 @@
+json.partial! "onchain_billing_contracts/onchain_billing_contract", onchain_billing_contract: @onchain_billing_contract

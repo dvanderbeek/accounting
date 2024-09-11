@@ -10,25 +10,30 @@ org = Org.create(name: "Example Org")
 # Debit Cash (increase its balance, since it's a normal debit account)
 # Credit Revenue (increase its balance, since it's normal credit account; eventually gets moved to retained earnings)
 accounts = OpenStruct.new(
-  cash: Plutus::Asset.create(name: "Cash", tenant: org),
+  cash: Plutus::Asset.create(name: "cash", tenant: org),
   # TODO: Create separate accounts for CL and EL Rewards & Income
-  rewards: Plutus::Asset.create(name: "ETH (Validator Rewards)", tenant: org),
-  ocb_eth: Plutus::Asset.create(name: "ETH (OCB)", tenant: org),
-  validator_income: Plutus::Revenue.create(name: "Validator Income", tenant: org),
-  service_fees: Plutus::Expense.create(name: "Validator Fees", tenant: org),
-  accrued_service_fees: Plutus::Liability.create(name: "Accrued Service Fees", tenant: org),
-  fee_overpayments: Plutus::Asset.create(name: "Fee Overpayment Receivables", tenant: org)
+  rewards: Plutus::Asset.create(name: "rewards", tenant: org),
+  ocb_eth: Plutus::Asset.create(name: "ocb_eth", tenant: org),
+  validator_income: Plutus::Revenue.create(name: "validator_income", tenant: org),
+  service_fees: Plutus::Expense.create(name: "service_fees", tenant: org),
+  accrued_service_fees: Plutus::Liability.create(name: "accrued_service_fees", tenant: org),
+  fee_overpayments: Plutus::Asset.create(name: "fee_overpayments", tenant: org)
 )
 
+contract = OnchainBilling::Contract.create(tab: 0, org:)
 subscription = Subscription.new(fee: 0.05)
+date = Date.current
 
-Reward.create!(amount: 150, paid_to: accounts.ocb_eth, accounts:, subscription:, org:)
-Reward.create!(amount: 250, paid_to: accounts.rewards, accounts:, subscription:, org:)
-FeePayment.create!(org_id: org.id, amount: 5, from_account: accounts.cash, accounts:)
-FeePayment.create!(org_id: org.id, amount: 32, from_account: accounts.ocb_eth, accounts:)
-OcbPayout.create!(amount: 118, accounts:, org:)
-Reimbursement.create(amount: [0, accounts.fee_overpayments.balance].max, org:, accounts:)
-FeePayment.create!(org_id: org.id, amount: 45, from_account: accounts.cash, accounts:)
+Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
+Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
+FeePayment.create!(amount: 5, from_account: accounts.cash, org: org, date:)
+contract.update(tab: accounts.accrued_service_fees.balance)
+Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
+Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
+contract.update(tab: accounts.accrued_service_fees.balance)
+Reimbursement.create(amount: [0, accounts.fee_overpayments.balance].max, org:, date:)
+FeePayment.create!(amount: 45, from_account: accounts.cash, org: org, date:)
+contract.update(tab: accounts.accrued_service_fees.balance)
 
 #############################################################################
 # Querying the data
@@ -36,7 +41,6 @@ FeePayment.create!(org_id: org.id, amount: 45, from_account: accounts.cash, acco
 statement = Statement.new(
   start_date: Date.new(2024, 1, 1),
   end_date: Date.new(2024, 12, 31),
-  accounts:,
   org:
 )
 
