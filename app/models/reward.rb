@@ -28,7 +28,12 @@ class Reward < ApplicationRecord
 
     # Simulate the OCB Contract getting a payment
     if paid_to.name == 'ocb_eth'
-      OnchainBilling::Contract.last.process_transfer(self)
+      onchain_billing_contract.process_transfer(self)
+    end
+
+    # Update OCB contract to tell it how much the customer owes in fees
+    if accounts.accrued_service_fees.balance > 1 # limit frequency of updates with a threshold of amount owed
+      onchain_billing_contract.update(tab: accounts.accrued_service_fees.balance)
     end
   end
 
@@ -36,6 +41,10 @@ class Reward < ApplicationRecord
 
   def accounts
     org.accounts_by_name
+  end
+
+  def onchain_billing_contract
+    OnchainBilling::Contract.find_by(org:)
   end
 
   # TODO: move this to a separate namespace

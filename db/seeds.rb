@@ -27,13 +27,10 @@ date = Date.current
 Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
 FeePayment.create!(amount: 5, from_account: accounts.cash, org: org, date:)
-contract.update(tab: accounts.accrued_service_fees.balance)
 Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
-contract.update(tab: accounts.accrued_service_fees.balance)
 Reimbursement.create(amount: [0, accounts.fee_overpayments.balance].max, org:, date:)
 FeePayment.create!(amount: 45, from_account: accounts.cash, org: org, date:)
-contract.update(tab: accounts.accrued_service_fees.balance)
 
 #############################################################################
 # Querying the data

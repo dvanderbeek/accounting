@@ -12,6 +12,8 @@ class FeePayment < ApplicationRecord
         { amount: amount, account: from_account }
       ]
     )
+
+    OnchainBilling::Contract.find_by(org:).update(tab: accrued)
   end
 
   private
