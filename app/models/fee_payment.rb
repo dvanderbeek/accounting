@@ -1,7 +1,6 @@
 class FeePayment < ApplicationRecord
   belongs_to :org
-
-  attr_accessor :from_account
+  belongs_to :from_account, class_name: 'Plutus::Account'
 
   after_create do
     Plutus::Entry.create!(

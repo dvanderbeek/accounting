@@ -30,7 +30,7 @@ FeePayment.create!(amount: 5, from_account: accounts.cash, org: org, date:)
 Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reimbursement.create(amount: [0, accounts.fee_overpayments.balance].max, org:, date:)
-FeePayment.create!(amount: 45, from_account: accounts.cash, org: org, date:)
+FeePayment.create!(amount: 4.5, from_account: accounts.cash, org: org, date:)
 
 #############################################################################
 # Querying the data
