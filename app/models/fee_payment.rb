@@ -13,7 +13,7 @@ class FeePayment < ApplicationRecord
       ]
     )
 
-    OnchainBilling::Contract.find_by(org:).update(tab: accrued)
+    onchain_billing_contract.update_tab
   end
 
   private
@@ -35,5 +35,9 @@ class FeePayment < ApplicationRecord
     else
       [{ amount: amount, account: accounts.accrued_service_fees }]
     end
+  end
+
+  def onchain_billing_contract
+    OnchainBilling::Contract.find_by(org:)
   end
 end

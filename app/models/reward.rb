@@ -33,10 +33,7 @@ class Reward < ApplicationRecord
       onchain_billing_contract.process_transfer(self)
     end
 
-    # Update OCB contract to tell it how much the customer owes in fees
-    if accounts.accrued_service_fees.balance > 1 # limit frequency of updates with a threshold of amount owed
-      onchain_billing_contract.update(tab: accounts.accrued_service_fees.balance)
-    end
+    onchain_billing_contract.update_tab
   end
 
   private

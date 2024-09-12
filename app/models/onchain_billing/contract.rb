@@ -13,4 +13,9 @@ class OnchainBilling::Contract < ApplicationRecord
     FeePayment.create!(org: org, amount: fee, from_account: org.accounts_by_name.ocb_eth, date: reward.date)
     OcbPayout.create!(amount: net_reward, org:, date: reward.date) if net_reward.positive?
   end
+
+  def update_tab
+    # Update OCB contract to tell it how much the customer owes in fees
+    update(tab: org.balance_owed) if org.balance_owed > 1 # limit frequency of updates with a threshold of amount owed
+  end
 end
