@@ -2,6 +2,7 @@ class OcbPayout < ApplicationRecord
   belongs_to :org
 
   after_create do
+    puts "recording OCB reward payout"
     # This is the portion of an OCB payout that goes to the customer
     Plutus::Entry.create!(
       date:,

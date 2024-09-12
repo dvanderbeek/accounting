@@ -4,6 +4,7 @@ class Reward < ApplicationRecord
   belongs_to :org
 
   after_create do
+    puts "recording reward earned"
     Plutus::Entry.create!(
       description: "Validator Reward Earned",
       date:,
@@ -15,6 +16,7 @@ class Reward < ApplicationRecord
       ]
     )
 
+    puts "recording fee accrued"
     Plutus::Entry.create!(
       description: "Service Fees Accrued",
       date:,

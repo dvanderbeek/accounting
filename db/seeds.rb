@@ -29,8 +29,7 @@ Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date
 FeePayment.create!(amount: 5, from_account: accounts.cash, org: org, date:)
 Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
-Reimbursement.create(amount: [0, accounts.fee_overpayments.balance].max, org:, date:)
-FeePayment.create!(amount: 4.5, from_account: accounts.cash, org: org, date:)
+FeePayment.create!(amount: 4.5, from_account: accounts.cash, org: org, date:) # Settles tab so OCB contract tab == 0
 
 #############################################################################
 # Querying the data
