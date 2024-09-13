@@ -16,6 +16,7 @@ class OnchainBilling::Contract < ApplicationRecord
 
   def update_tab
     # Update OCB contract to tell it how much the customer owes in fees
-    update(tab: org.balance_owed) if org.balance_owed > 1 # limit frequency of updates with a threshold of amount owed
+    puts "Updating OCB contract tab"
+    update(tab: org.balance_owed) if org.balance_owed
   end
 end

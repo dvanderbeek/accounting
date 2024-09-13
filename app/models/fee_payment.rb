@@ -19,11 +19,11 @@ class FeePayment < ApplicationRecord
   private
 
   def accounts
-    org.accounts_by_name
+    @accounts ||= org.accounts_by_name
   end
 
   def accrued
-    accounts.accrued_service_fees.balance
+    @accrued ||= accounts.accrued_service_fees.balance
   end
 
   def debits
