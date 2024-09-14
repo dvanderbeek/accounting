@@ -8,4 +8,8 @@ class Org < ApplicationRecord
       Plutus::Account.where(tenant: self).index_by(&:name)
     )
   end
+
+  def subscription
+    @subscription ||= Subscription.new(fee: 0.05)
+  end
 end

@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
+  mount Plutus::Engine, at: "/plutus"
+
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :onchain_billing do
     resources :contracts
   end
   get 'home/index'
-  mount Plutus::Engine, at: "/plutus"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  post '/earn_reward', to: 'home#earn_reward', as: :simulate_reward
+  post '/pay_fee', to: 'home#pay_fee', as: :simulate_fee_payment
+
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

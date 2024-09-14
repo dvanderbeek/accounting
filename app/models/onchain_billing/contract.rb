@@ -15,6 +15,12 @@ class OnchainBilling::Contract < ApplicationRecord
 
   def update_tab
     # Update OCB contract to tell it how much the customer owes in fees
+
+    # Instead of doing this whenever rewards are earned or fee payments are made, we could change the contract flow to:
+      # Emit an event when a transfer is received
+      # listen for that event
+      # trigger a payout function with inputs telling it how much the customer's accrued fee balance is
+
     puts "Updating OCB contract tab"
     update(tab: org.balance_owed) if org.balance_owed
   end

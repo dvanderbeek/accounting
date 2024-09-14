@@ -1,4 +1,8 @@
 <div class="container pt-5">
+
+  <%= button_to "Simulate Reward", simulate_reward_path, method: :post, class: 'btn btn-primary mb-3' %>
+  <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary mb-3' %>
+
   <table class="table table-bordered table-striped shadow-sm rounded bg-white">
     <thead class="thead-light">
       <tr>

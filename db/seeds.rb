@@ -10,7 +10,6 @@ org = Org.create(name: "Example Org")
 # Debit Cash (increase its balance, since it's a normal debit account)
 # Credit Revenue (increase its balance, since it's normal credit account; eventually gets moved to retained earnings)
 accounts = OpenStruct.new(
-  cash: Plutus::Asset.create(name: "cash", tenant: org),
   # TODO: Create separate accounts for CL and EL Rewards & Income
   rewards: Plutus::Asset.create(name: "rewards", tenant: org),
   ocb_eth: Plutus::Asset.create(name: "ocb_eth", tenant: org),
@@ -21,15 +20,15 @@ accounts = OpenStruct.new(
 )
 
 contract = OnchainBilling::Contract.create(tab: 0, org:)
-subscription = Subscription.new(fee: 0.05)
 date = Date.current
+subscription = org.subscription
 
 Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
-FeePayment.create!(amount: 5, from_account: accounts.cash, org: org, date:)
+FeePayment.create!(amount: 5, from_account: accounts.rewards, org: org, date:)
 Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
-FeePayment.create!(amount: 4.5, from_account: accounts.cash, org: org, date:) # Settles tab so OCB contract tab == 0
+FeePayment.create!(amount: 4.5, from_account: accounts.rewards, org: org, date:) # Settles tab so OCB contract tab == 0
 
 #############################################################################
 # Querying the data

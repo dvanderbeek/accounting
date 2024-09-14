@@ -3,7 +3,7 @@ class FeePayment < ApplicationRecord
   belongs_to :from_account, class_name: 'Plutus::Account'
 
   after_create do
-    puts "recording fee payment"
+    puts "recording fee payment from #{from_account.name}"
     Plutus::Entry.create!(
       description: "Paid Service Fees",
       date:,
