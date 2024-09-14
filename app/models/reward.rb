@@ -1,5 +1,6 @@
 class Reward < ApplicationRecord
-  attr_accessor :paid_to, :subscription
+  attr_accessor :subscription
+  belongs_to :paid_to, class_name: 'Plutus::Account'
 
   belongs_to :org
 

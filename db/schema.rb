@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_12_133324) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_14_004227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -95,7 +95,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_12_133324) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "date"
+    t.bigint "paid_to_id", null: false
     t.index ["org_id"], name: "index_rewards_on_org_id"
+    t.index ["paid_to_id"], name: "index_rewards_on_paid_to_id"
   end
 
   add_foreign_key "fee_payments", "orgs"
@@ -104,4 +106,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_12_133324) do
   add_foreign_key "onchain_billing_contracts", "orgs"
   add_foreign_key "reimbursements", "orgs"
   add_foreign_key "rewards", "orgs"
+  add_foreign_key "rewards", "plutus_accounts", column: "paid_to_id"
 end

@@ -67,7 +67,34 @@
     </div>
 
     <div class="card-body">
-      <p class="card-text">Tab: <%= @ocb_contract.tab %></p>
+      <p class="card-text h4">Tab: <%= @ocb_contract.tab %> ETH</p>
+
+      <h6>Transfers Received</h6>
+      <ul class="list-group">
+        <% Reward.where(paid_to: @org.accounts_by_name.ocb_eth).find_each do |reward| %>
+          <li class="list-group-item">
+            <%= reward.date %>: <%= reward.amount %> ETH
+          </li>
+        <% end %>
+      </ul>
+
+      <h6>Payouts</h6>
+      <ul class="list-group">
+        <% OcbPayout.find_each do |payout| %>
+          <li class="list-group-item">
+            <%= payout.date %>: <%= payout.amount %> ETH
+          </li>
+        <% end %>
+      </ul>
+
+      <h6>Fee Payments</h6>
+      <ul class="list-group">
+        <% FeePayment.where(from_account: @org.accounts_by_name.ocb_eth).find_each do |payment| %>
+          <li class="list-group-item">
+            <%= payment.date %>: <%= payment.amount %> ETH
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>
