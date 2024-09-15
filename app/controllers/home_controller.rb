@@ -21,13 +21,12 @@ class HomeController < ApplicationController
     redirect_to root_path
   end
 
-
-
   def pay_fee
     org = Org.first
     date = Date.current
+    amount = org.accounts_by_name.accrued_service_fees.balance
 
-    FeePayment.create!(amount: org.accounts_by_name.accrued_service_fees.balance, from_account: org.accounts_by_name.rewards, org:, date:) # Settles tab so OCB contract tab == 0
+    FeePayment.create!(amount:, from_account: org.accounts_by_name.rewards, org:, date:) # Settles tab so OCB contract tab == 0
 
     redirect_to root_path
   end

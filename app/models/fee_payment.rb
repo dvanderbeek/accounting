@@ -2,8 +2,10 @@ class FeePayment < ApplicationRecord
   belongs_to :org
   belongs_to :from_account, class_name: 'Plutus::Account'
 
+  validates :amount, numericality: { greater_than: 0 }
+
   after_create do
-    puts "recording fee payment from #{from_account.name}"
+    puts "recording fee payment of #{amount} from #{from_account.name}"
     Plutus::Entry.create!(
       description: "Paid Service Fees",
       date:,
