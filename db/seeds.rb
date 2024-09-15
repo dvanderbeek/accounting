@@ -11,7 +11,7 @@ org = Org.create(name: "Example Org")
 # Credit Revenue (increase its balance, since it's normal credit account; eventually gets moved to retained earnings)
 
 accounts = OpenStruct.new(
-  # TODO: Create separate accounts for CL and EL Rewards & Income
+  # TODO: Create separate accounts for CL and EL Rewards & Income (or just add type to Reward model)
   rewards: Plutus::Asset.create(name: "rewards", tenant: org),
   ocb_eth: Plutus::Asset.create(name: "ocb_eth", tenant: org),
   validator_income: Plutus::Revenue.create(name: "validator_income", tenant: org),
