@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_14_004227) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_16_195603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "billing_prices", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "name"
+    t.string "billing_scheme"
+    t.integer "price_per_unit_cents"
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_billing_prices_on_product_id"
+  end
+
+  create_table "billing_products", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "billing_subscriptions", force: :cascade do |t|
+    t.bigint "org_id", null: false
+    t.bigint "price_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["org_id"], name: "index_billing_subscriptions_on_org_id"
+    t.index ["price_id"], name: "index_billing_subscriptions_on_price_id"
+  end
 
   create_table "fee_payments", force: :cascade do |t|
     t.decimal "amount"
@@ -100,6 +126,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_004227) do
     t.index ["paid_to_id"], name: "index_rewards_on_paid_to_id"
   end
 
+  add_foreign_key "billing_prices", "billing_products", column: "product_id"
+  add_foreign_key "billing_subscriptions", "billing_prices", column: "price_id"
+  add_foreign_key "billing_subscriptions", "orgs"
   add_foreign_key "fee_payments", "orgs"
   add_foreign_key "fee_payments", "plutus_accounts", column: "from_account_id"
   add_foreign_key "ocb_payouts", "orgs"

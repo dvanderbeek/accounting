@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :billing do
+    resources :subscriptions
+    resources :prices
+    resources :products
+  end
   mount Plutus::Engine, at: "/plutus"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

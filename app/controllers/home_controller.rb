@@ -13,7 +13,7 @@ class HomeController < ApplicationController
     org = Org.first
     amount = (10..300).to_a.sample
     paid_to = [org.accounts_by_name.ocb_eth, org.accounts_by_name.rewards].sample
-    subscription = org.subscription
+    subscription = Billing::Subscription.find_by(org:)
     date = Date.current
 
     Reward.create!(amount:, paid_to:, subscription:, org:, date:)

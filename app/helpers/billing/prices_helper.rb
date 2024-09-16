@@ -1,0 +1,2 @@
+module Billing::PricesHelper
+end

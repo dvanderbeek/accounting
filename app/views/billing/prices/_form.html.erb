@@ -1,0 +1,42 @@
+<%= form_with(model: billing_price) do |form| %>
+  <% if billing_price.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(billing_price.errors.count, "error") %> prohibited this billing_price from being saved:</h2>
+
+      <ul>
+        <% billing_price.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :product_id, style: "display: block" %>
+    <%= form.text_field :product_id %>
+  </div>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :billing_scheme, style: "display: block" %>
+    <%= form.text_field :billing_scheme %>
+  </div>
+
+  <div>
+    <%= form.label :price_per_unit_cents, style: "display: block" %>
+    <%= form.text_field :price_per_unit_cents %>
+  </div>
+
+  <div>
+    <%= form.label :currency, style: "display: block" %>
+    <%= form.text_field :currency %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

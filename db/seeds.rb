@@ -24,7 +24,10 @@ accounts = OpenStruct.new(
 OnchainBilling::Contract.create(tab: 0, org:)
 
 date = Date.current
-subscription = org.subscription
+
+product = Billing::Product.create(name: "ETH Validator Staking")
+price = Billing::Price.create(name: 'Standard 5%', product:, price_per_unit_cents: 5, currency: 'ETH', billing_scheme: 'usage_based')
+subscription = Billing::Subscription.create(org:, price:)
 
 Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)

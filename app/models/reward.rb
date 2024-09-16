@@ -51,6 +51,6 @@ class Reward < ApplicationRecord
   def fee
     # Accrued fees are based on the pricing for this validator, which we know at the time when rewards are earned
     # (from the future Billing service)
-    amount.to_d * subscription.fee
+    subscription.fee(amount)
   end
 end

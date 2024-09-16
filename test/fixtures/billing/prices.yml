@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product: one
+  name: MyString
+  billing_scheme: MyString
+  price_per_unit_cents: 5
+  currency: MyString
+
+two:
+  product: two
+  name: MyString
+  billing_scheme: MyString
+  price_per_unit_cents: 10
+  currency: MyString

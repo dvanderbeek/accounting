@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  amount: 9.99
   org: one
+  price: one
 
 two:
-  amount: 9.99
   org: two
+  price: two
