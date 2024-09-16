@@ -47,10 +47,7 @@ class Reward < ApplicationRecord
     OnchainBilling::Contract.find_by(org:)
   end
 
-  # TODO: move this to a separate namespace
   def fee
-    # Accrued fees are based on the pricing for this validator, which we know at the time when rewards are earned
-    # (from the future Billing service)
-    subscription.fee(amount)
+    @fee ||= subscription.fee(amount)
   end
 end

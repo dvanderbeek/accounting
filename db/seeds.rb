@@ -26,7 +26,7 @@ OnchainBilling::Contract.create(tab: 0, org:)
 date = Date.current
 
 product = Billing::Product.create(name: "ETH Validator Staking")
-price = Billing::Price.create(name: 'Standard 5%', product:, price_per_unit_cents: 5, currency: 'ETH', billing_scheme: 'usage_based')
+price = Billing::Price.create(name: 'Standard 5%', product:, price_per_unit_percent: 0.05, currency: 'ETH', billing_scheme: 'usage_based')
 subscription = Billing::Subscription.create(org:, price:)
 
 Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)

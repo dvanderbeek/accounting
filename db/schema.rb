@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_16_195603) do
     t.bigint "product_id", null: false
     t.string "name"
     t.string "billing_scheme"
-    t.integer "price_per_unit_cents"
+    t.decimal "price_per_unit_percent"
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

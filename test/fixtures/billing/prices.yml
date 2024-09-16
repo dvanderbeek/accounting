@@ -4,12 +4,12 @@ one:
   product: one
   name: MyString
   billing_scheme: MyString
-  price_per_unit_cents: 5
+  price_per_unit_percent: 0.05
   currency: MyString
 
 two:
   product: two
   name: MyString
   billing_scheme: MyString
-  price_per_unit_cents: 10
+  price_per_unit_percent: 0.10
   currency: MyString
