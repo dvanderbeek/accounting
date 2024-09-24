@@ -1,11 +1,12 @@
 class Reward < ApplicationRecord
+  include OcbScopes
+
   attr_accessor :subscription
   belongs_to :paid_to, class_name: 'Plutus::Account'
 
   belongs_to :org
 
-  scope :ocb, -> { joins(:paid_to).where(paid_to: { name: 'ocb_eth' }) }
-  scope :direct, -> { joins(:paid_to).where.not(paid_to: { name: 'ocb_eth' }) }
+  ocb_scopes :paid_to
 
   after_create do
     puts "recording reward earned"

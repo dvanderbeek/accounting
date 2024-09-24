@@ -1,11 +1,11 @@
 class FeePayment < ApplicationRecord
+  include OcbScopes
   belongs_to :org
   belongs_to :from_account, class_name: 'Plutus::Account'
 
   validates :amount, numericality: { greater_than: 0 }
 
-  scope :ocb, -> { joins(:from_account).where(from_account: { name: 'ocb_eth' }) }
-  scope :direct, -> { joins(:from_account).where.not(from_account: { name: 'ocb_eth' }) }
+  ocb_scopes :from_account
 
   after_create do
     puts "recording fee payment of #{amount} from #{from_account.name}"
