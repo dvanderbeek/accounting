@@ -4,6 +4,9 @@ class Reward < ApplicationRecord
 
   belongs_to :org
 
+  scope :ocb, -> { joins(:paid_to).where(paid_to: { name: 'ocb_eth' }) }
+  scope :direct, -> { joins(:paid_to).where.not(paid_to: { name: 'ocb_eth' }) }
+
   after_create do
     puts "recording reward earned"
     Plutus::Entry.create!(

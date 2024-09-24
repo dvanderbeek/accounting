@@ -4,6 +4,9 @@ class FeePayment < ApplicationRecord
 
   validates :amount, numericality: { greater_than: 0 }
 
+  scope :ocb, -> { joins(:from_account).where(from_account: { name: 'ocb_eth' }) }
+  scope :direct, -> { joins(:from_account).where.not(from_account: { name: 'ocb_eth' }) }
+
   after_create do
     puts "recording fee payment of #{amount} from #{from_account.name}"
     Plutus::Entry.create!(
