@@ -2,6 +2,7 @@
 
   <%= button_to "Simulate Reward", simulate_reward_path, method: :post, class: 'btn btn-primary mb-3' %>
   <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary mb-3' %>
+  <%= button_to "Simulate Reward Sweep", simulate_sweep_path, method: :post, class: 'btn btn-primary mb-3' %>
 
   <table class="table table-bordered table-striped shadow-sm rounded bg-white">
     <thead class="thead-light">
@@ -46,6 +47,10 @@
       <tr>
         <td>Rewards Received:</td>
         <td><%= @statement.net_rewards_cash %></td>
+      </tr>
+      <tr>
+        <td>Unswept Rewards:</td>
+        <td><%= @statement.unswept_rewards %></td>
       </tr>
       <tr>
         <td>Net Rewards Earned:</td>

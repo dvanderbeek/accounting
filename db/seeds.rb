@@ -13,6 +13,7 @@ org = Org.create(name: "Example Org")
 accounts = OpenStruct.new(
   # TODO: Create separate accounts for CL and EL Rewards & Income (or just add type to Reward model)
   rewards: Plutus::Asset.create(name: "rewards", tenant: org),
+  unswept_rewards: Plutus::Asset.create(name: "unswept_rewards", tenant: org),
   ocb_eth: Plutus::Asset.create(name: "ocb_eth", tenant: org),
   validator_income: Plutus::Revenue.create(name: "validator_income", tenant: org),
   service_fees: Plutus::Expense.create(name: "service_fees", tenant: org),
@@ -27,7 +28,8 @@ date = Date.current
 subscription = org.subscription
 
 Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
-Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
+Reward.create!(amount: 250, paid_to: accounts.unswept_rewards, subscription:, org:, date:)
+Sweep.create!(org:)
 FeePayment.create!(amount: 5, from_account: accounts.rewards, org: org, date:)
 Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)

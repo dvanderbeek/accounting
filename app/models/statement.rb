@@ -8,6 +8,10 @@ class Statement
     { from_date: start_date, to_date: end_date }
   end
 
+  def unswept_rewards
+    accounts.unswept_rewards.balance(**args)
+  end
+
   # Calculate Gross Rewards
   def gross_rewards_total
     accounts.validator_income.balance(**args)
@@ -45,7 +49,7 @@ class Statement
 
   # Calculate Net Rewards (cash payouts)
   def net_rewards_cash
-    gross_rewards_total - fees_paid + reimbursements
+    gross_rewards_total - unswept_rewards - fees_paid + reimbursements
   end
 
   # Calculate Net Rewards (rewards earned - fees accrued)
