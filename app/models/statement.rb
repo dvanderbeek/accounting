@@ -9,12 +9,16 @@ class Statement
   end
 
   def unswept_rewards
-    accounts.unswept_rewards.balance(**args)
+    @unswept_rewards ||= accounts.unswept_rewards.balance(**args)
   end
 
   # Calculate Gross Rewards
   def gross_rewards_total
-    accounts.validator_income.balance(**args)
+    @gross_rewards_total ||= accounts.validator_income.balance(**args)
+  end
+
+  def gross_rewards_received
+    gross_rewards_total - unswept_rewards
   end
 
   # Total fee expense

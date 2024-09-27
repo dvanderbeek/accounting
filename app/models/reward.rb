@@ -9,7 +9,7 @@ class Reward < ApplicationRecord
   ocb_scopes :paid_to
 
   after_create do
-    puts "recording reward earned"
+    puts "recording reward earned of #{amount} to #{paid_to.name}"
     Plutus::Entry.create!(
       description: "Validator Reward Earned",
       date:,
