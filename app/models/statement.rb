@@ -71,6 +71,14 @@ class Statement
     # Plutus::Asset.where(tenant: org).balance(**args)
   end
 
+  def received_rewards_reconciles?
+    received_rewards - direct_fee_payments == net_rewards_cash
+  end
+
+  def net_rewards_reconciles?
+    net_rewards_cash + unswept_rewards - balance == net_rewards
+  end
+
   # net_rewards = net_rewards_cash + overpayments_owed - balance
 
   def print

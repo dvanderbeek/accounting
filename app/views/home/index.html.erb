@@ -84,12 +84,43 @@
 
       <tr>
         <td>Direct Fee Payments</td>
-        <td><%= @statement.direct_fee_payments %></td>
+        <td>- <%= @statement.direct_fee_payments %></td>
       </tr>
 
       <tr>
         <td>Net Rewards Cash</td>
+        <td>= <%= @statement.net_rewards_cash %>  <%= @statement.received_rewards_reconciles? ? '✅' : '❌' %></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+  <table class="table table-bordered table-striped shadow-sm rounded bg-white">
+    <thead class="thead-light">
+      <tr>
+        <th colspan="2" class="text-left h4">Net Rewards Reconciliation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Net Rewards Cash</td>
         <td><%= @statement.net_rewards_cash %></td>
+      </tr>
+
+      <tr>
+        <td>Unswept Rewards</td>
+        <td>+ <%= @statement.unswept_rewards %></td>
+      </tr>
+
+      <tr>
+        <td>Balance Owed</td>
+        <td>- <%= @statement.balance %></td>
+      </tr>
+
+      <tr>
+        <td>Net Rewards</td>
+        <td>= <%= @statement.net_rewards %> <%= @statement.net_rewards_reconciles? ? '✅' : '❌' %></td>
       </tr>
     </tbody>
   </table>
