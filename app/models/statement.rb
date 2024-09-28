@@ -61,7 +61,8 @@ class Statement
 
   # Calculate Net Rewards (cash payouts)
   def net_rewards_cash
-    gross_rewards_total - unswept_rewards - fees_paid + reimbursements
+    received_rewards - direct_fee_payments
+    # gross_rewards_total - unswept_rewards - fees_paid + reimbursements
   end
 
   # Calculate Net Rewards (rewards earned - fees accrued)

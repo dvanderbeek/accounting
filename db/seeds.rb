@@ -29,6 +29,7 @@ subscription = org.subscription
 
 Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 Reward.create!(amount: 250, paid_to: accounts.unswept_rewards, subscription:, org:, date:)
+Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
 Sweep.create!(org:)
 FeePayment.create!(amount: 5, from_account: accounts.rewards, org: org, date:)
 Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)

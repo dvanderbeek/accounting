@@ -70,8 +70,8 @@
     </tbody>
   </table>
 
-  <table>
-    <thead>
+  <table class="table table-bordered table-striped shadow-sm rounded bg-white">
+    <thead class="thead-light">
       <tr>
         <th colspan="2" class="text-left h4">Received Rewards Reconciliation</th>
       </tr>
@@ -93,37 +93,6 @@
       </tr>
     </tbody>
   </table>
-
-  <canvas id="rewardsChart"></canvas>
-  <script>
-    const ctx = document.getElementById('rewardsChart').getContext('2d');
-    const rewardsChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Rewards'],
-        datasets: [
-          {
-            label: 'Unswept Rewards',
-            data: [<%= @unswept_rewards %>],
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          },
-          {
-            label: 'Gross Rewards Received',
-            data: [<%= @gross_rewards_received %>],
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            stacked: true
-          }
-        }
-      }
-    });
-  </script>
 
   <div class="card">
     <div class="card-header">
