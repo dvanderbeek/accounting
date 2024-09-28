@@ -51,6 +51,14 @@ class Statement
     FeePayment.where(org: org, date: (start_date..end_date)).sum(:amount)
   end
 
+  def direct_fee_payments
+    @direct_fee_paymnets ||= FeePayment.direct.where(org: org, date: (start_date..end_date)).sum(:amount)
+  end
+
+  def received_rewards
+    @received_rewards ||= accounts.rewards.debits_balance(**args)
+  end
+
   # Calculate Net Rewards (cash payouts)
   def net_rewards_cash
     gross_rewards_total - unswept_rewards - fees_paid + reimbursements

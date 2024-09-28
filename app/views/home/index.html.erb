@@ -49,7 +49,7 @@
         <th colspan="2" class="bg-light">Net Rewards</th>
       </tr>
       <tr>
-        <td>Rewards Received:</td>
+        <td>Net Rewards Cash:</td>
         <td><%= @statement.net_rewards_cash %></td>
       </tr>
       <tr>
@@ -69,6 +69,61 @@
       </tr>
     </tbody>
   </table>
+
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2" class="text-left h4">Received Rewards Reconciliation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Received Rewards</td>
+        <td><%= @statement.received_rewards %></td>
+      </tr>
+
+      <tr>
+        <td>Direct Fee Payments</td>
+        <td><%= @statement.direct_fee_payments %></td>
+      </tr>
+
+      <tr>
+        <td>Net Rewards Cash</td>
+        <td><%= @statement.net_rewards_cash %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <canvas id="rewardsChart"></canvas>
+  <script>
+    const ctx = document.getElementById('rewardsChart').getContext('2d');
+    const rewardsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Rewards'],
+        datasets: [
+          {
+            label: 'Unswept Rewards',
+            data: [<%= @unswept_rewards %>],
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+          {
+            label: 'Gross Rewards Received',
+            data: [<%= @gross_rewards_received %>],
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            stacked: true
+          }
+        }
+      }
+    });
+  </script>
 
   <div class="card">
     <div class="card-header">

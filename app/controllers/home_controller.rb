@@ -6,6 +6,8 @@ class HomeController < ApplicationController
       end_date: Date.current.end_of_month,
       org: @org
     )
+    @unswept_rewards = @statement.unswept_rewards
+    @gross_rewards_received = @statement.gross_rewards_received
     @ocb_contract = OnchainBilling::Contract.find_by(org: @org)
   end
 
