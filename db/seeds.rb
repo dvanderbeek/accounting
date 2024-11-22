@@ -1,4 +1,4 @@
-org = Org.create(name: "Example Org")
+org = Org.create(name: "0x89d4f87230f83333a76513e891a0f264ae24220630f7a4a1ed2c57942ab1bf47a884a9d4acc5f885707356de3f54e2d3")
 
 # Basic accounting data model: Accounts are the buckets of value (specific types of assets, liabilities, equity, etc)
 # Entries keep track of changes to Account balances, each one has n Debits and Credits, which need to balance each other out
@@ -27,13 +27,13 @@ OnchainBilling::Contract.create(tab: 0, org:)
 date = Date.current
 subscription = org.subscription
 
-Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
-Reward.create!(amount: 250, paid_to: accounts.unswept_rewards, subscription:, org:, date:)
-Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
-Sweep.create!(org:)
-FeePayment.create!(amount: 5, from_account: accounts.rewards, org: org, date:)
-Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
-Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
+# Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
+# Reward.create!(amount: 250, paid_to: accounts.unswept_rewards, subscription:, org:, date:)
+# Reward.create!(amount: 250, paid_to: accounts.rewards, subscription:, org:, date:)
+# Sweep.create!(org:)
+# FeePayment.create!(amount: 5, from_account: accounts.rewards, org:, date:)
+# Reward.create!(amount: 10, paid_to: accounts.ocb_eth, subscription:, org:, date:)
+# Reward.create!(amount: 90, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 # FeePayment.create!(amount: 4.5, from_account: accounts.rewards, org: org, date:) # Settles tab so OCB contract tab == 0
 
 #############################################################################

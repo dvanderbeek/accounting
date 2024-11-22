@@ -1,4 +1,7 @@
 <div class="container pt-5">
+  <h1 class="h2">
+    Rewards Overview: <%= @org.name %>
+  </h1>
 
   <%= button_to "Simulate Reward", simulate_reward_path, method: :post, class: 'btn btn-primary mb-3' %>
   <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary mb-3' %>
@@ -111,6 +114,11 @@
       <tr>
         <td>Unswept Rewards</td>
         <td>+ <%= @statement.unswept_rewards %></td>
+      </tr>
+
+      <tr>
+        <td>OCB Balance</td>
+        <td>+ <%= @statement.ocb_balance %></td>
       </tr>
 
       <tr>

@@ -4,8 +4,9 @@ class OnchainBilling::Contract < ApplicationRecord
   def process_transfer(reward)
     puts "OCB contract received transfer - processing payouts"
 
-    fee = [reward.amount, tab].min # we don't care about the fee percentage for this specific reward. since we're tracking the customer's balance owed, we can just take the min of that balance or the amount of ETH received by the contract.
-    net_reward = reward.amount - fee
+    balance = org.accounts_by_name.ocb_eth.balance
+    fee = [balance, tab].min # we don't care about the fee percentage for this specific reward. since we're tracking the customer's balance owed, we can just take the min of that balance or the amount of ETH received by the contract.
+    net_reward = balance - fee
 
     # Obviously the contract would not create these records directly
     # these would be smart contract transfers, which we'd index and ultimately populate into these models

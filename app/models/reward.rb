@@ -34,7 +34,7 @@ class Reward < ApplicationRecord
     )
 
     # Simulate the OCB Contract getting a payment
-    if paid_to.name == 'ocb_eth'
+    if paid_to.name == 'ocb_eth' && !coinbase?
       onchain_billing_contract.process_transfer(self)
     end
 
@@ -42,6 +42,10 @@ class Reward < ApplicationRecord
   end
 
   private
+
+  def coinbase?
+    ([false] * 9 + [true]).sample
+  end
 
   def accounts
     org.accounts_by_name

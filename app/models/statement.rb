@@ -21,6 +21,10 @@ class Statement
     gross_rewards_total - unswept_rewards
   end
 
+  def ocb_balance
+    accounts.ocb_eth.balance(**args)
+  end
+
   # Total fee expense
   def fee_expenses
     accounts.service_fees.balance(**args)
@@ -76,7 +80,7 @@ class Statement
   end
 
   def net_rewards_reconciles?
-    net_rewards_cash + unswept_rewards - balance == net_rewards
+    net_rewards_cash + ocb_balance + unswept_rewards - balance == net_rewards
   end
 
   # net_rewards = net_rewards_cash + overpayments_owed - balance
