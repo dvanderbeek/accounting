@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   post '/pay_fee', to: 'home#pay_fee', as: :simulate_fee_payment
   post '/sweep', to: 'home#sweep', as: :simulate_sweep
 
+  namespace :webhooks do
+    namespace :quick_node do
+      resources :events, only: :create
+    end
+  end
+
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

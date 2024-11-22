@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_14_004227) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_22_231628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ethereum_blocks", force: :cascade do |t|
+    t.string "number_hex"
+    t.string "network"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "fee_payments", force: :cascade do |t|
     t.decimal "amount"
