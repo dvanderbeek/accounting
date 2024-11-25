@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_22_231628) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_24_190912) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_22_231628) do
     t.string "network"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "slot"
+  end
+
+  create_table "ethereum_validators", force: :cascade do |t|
+    t.bigint "onchain_index"
+    t.string "pubkey"
+    t.string "network"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "onchain_billing_contract_id"
+    t.index ["onchain_billing_contract_id"], name: "index_ethereum_validators_on_onchain_billing_contract_id"
   end
 
   create_table "fee_payments", force: :cascade do |t|
@@ -46,6 +57,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_22_231628) do
     t.bigint "org_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "address"
+    t.string "network"
     t.index ["org_id"], name: "index_onchain_billing_contracts_on_org_id"
   end
 
@@ -70,7 +83,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_22_231628) do
     t.string "type"
     t.integer "account_id"
     t.integer "entry_id"
-    t.decimal "amount", precision: 20, scale: 10
+    t.bigint "amount"
     t.index ["account_id", "entry_id"], name: "index_plutus_amounts_on_account_id_and_entry_id"
     t.index ["entry_id", "account_id"], name: "index_plutus_amounts_on_entry_id_and_account_id"
     t.index ["type"], name: "index_plutus_amounts_on_type"
@@ -107,6 +120,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_22_231628) do
     t.index ["paid_to_id"], name: "index_rewards_on_paid_to_id"
   end
 
+  add_foreign_key "ethereum_validators", "onchain_billing_contracts"
   add_foreign_key "fee_payments", "orgs"
   add_foreign_key "fee_payments", "plutus_accounts", column: "from_account_id"
   add_foreign_key "ocb_payouts", "orgs"

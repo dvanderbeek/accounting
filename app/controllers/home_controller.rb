@@ -2,8 +2,8 @@ class HomeController < ApplicationController
   def index
     @org = Org.first
     @statement = Statement.new(
-      start_date: Date.current.beginning_of_month,
-      end_date: Date.current.end_of_month,
+      start_date: Date.new(2024, 03, 01).beginning_of_month,
+      end_date: Date.current,
       org: @org
     )
     @unswept_rewards = @statement.unswept_rewards
@@ -17,8 +17,9 @@ class HomeController < ApplicationController
     paid_to = [org.accounts_by_name.ocb_eth, org.accounts_by_name.unswept_rewards].sample
     subscription = org.subscription
     date = Date.current
+    coinbase = ([false] * 9 + [true]).sample
 
-    Reward.create!(amount:, paid_to:, subscription:, org:, date:)
+    Reward.create!(amount:, paid_to:, subscription:, org:, date:, coinbase:)
 
     redirect_to root_path
   end

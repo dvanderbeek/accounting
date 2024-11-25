@@ -12,6 +12,7 @@ class OnchainBilling::Contract < ApplicationRecord
     # these would be smart contract transfers, which we'd index and ultimately populate into these models
     FeePayment.create!(org: org, amount: fee, from_account: org.accounts_by_name.ocb_eth, date: reward.date) if fee.positive?
     OcbPayout.create!(amount: net_reward, org:, date: reward.date) if net_reward.positive?
+    update_tab
   end
 
   def update_tab

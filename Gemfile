@@ -70,3 +70,5 @@ group :test do
 end
 
 gem "plutus", github: "mbulat/plutus"
+
+gem "faraday", "~> 2.12"

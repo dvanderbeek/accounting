@@ -1,4 +1,7 @@
-org = Org.create(name: "0x89d4f87230f83333a76513e891a0f264ae24220630f7a4a1ed2c57942ab1bf47a884a9d4acc5f885707356de3f54e2d3")
+org = Org.create(name: "0x86cc241cd30b92083e39cc47cc478bf05a2f31b9ced91d3ac12e7f7069c61b42dfa5070d645b3956e8588bec167e6cd3")
+# Set up mock OCB Contract that uses a "tab" model to collect exact fees owed instead of an approximation
+c = OnchainBilling::Contract.create(address: "0xCE987196E71EFCd640bE23F5FDc9FDaA9e962fd1", network: "holesky", org:)
+v = Ethereum::Validator.create(onchain_index: 1626173, pubkey: "0x86cc241cd30b92083e39cc47cc478bf05a2f31b9ced91d3ac12e7f7069c61b42dfa5070d645b3956e8588bec167e6cd3", network: "holesky", onchain_billing_contract: c)
 
 # Basic accounting data model: Accounts are the buckets of value (specific types of assets, liabilities, equity, etc)
 # Entries keep track of changes to Account balances, each one has n Debits and Credits, which need to balance each other out
@@ -21,11 +24,10 @@ accounts = OpenStruct.new(
   fee_overpayments: Plutus::Asset.create(name: "fee_overpayments", tenant: org)
 )
 
-# Set up mock OCB Contract that uses a "tab" model to collect exact fees owed instead of an approximation
-OnchainBilling::Contract.create(tab: 0, org:)
-
 date = Date.current
 subscription = org.subscription
+
+Ethereum::Block.create(network: "holesky", slot: 1309248)
 
 # Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 # Reward.create!(amount: 250, paid_to: accounts.unswept_rewards, subscription:, org:, date:)

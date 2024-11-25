@@ -1,7 +1,7 @@
 class Reward < ApplicationRecord
   include OcbScopes
 
-  attr_accessor :subscription
+  attr_accessor :subscription, :coinbase
   belongs_to :paid_to, class_name: 'Plutus::Account'
 
   belongs_to :org
@@ -34,18 +34,13 @@ class Reward < ApplicationRecord
     )
 
     # Simulate the OCB Contract getting a payment
-    if paid_to.name == 'ocb_eth' && !coinbase?
+    # TODO: Do this by indexing payouts rather than assuming it hapens when a non-coinbase OCB reward is earned
+    if paid_to.name == 'ocb_eth' && !coinbase
       onchain_billing_contract.process_transfer(self)
     end
-
-    onchain_billing_contract.update_tab
   end
 
   private
-
-  def coinbase?
-    ([false] * 9 + [true]).sample
-  end
 
   def accounts
     org.accounts_by_name
