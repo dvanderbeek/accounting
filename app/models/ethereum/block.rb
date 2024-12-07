@@ -2,7 +2,7 @@ class Ethereum::Block < ApplicationRecord
   after_create do
     update(number: beacon_block.block_number) if number_hex.nil?
     # This would probably be a background job
-    Ethereum::Blocks::Index.call(id) if validator.present?
+    Ethereum::Blocks::Index.new(id:).call if validator.present?
 
     # Also look for any payouts from OCB contract and track FeePayments and OcbPayouts; this can happen even if the block
     # was proposed by another validator (for example, if we did a sweep, or really any transfer went to one of the contracts)

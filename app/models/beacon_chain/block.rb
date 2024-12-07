@@ -27,7 +27,7 @@ class BeaconChain::Block < SimpleDelegator
   end
 
   def block_time
-    dig(:data, :message, :body, :execution_payload, :timestamp).to_i
+    Time.zone.at(dig(:data, :message, :body, :execution_payload, :timestamp).to_i)
   end
 
   def validator_index
