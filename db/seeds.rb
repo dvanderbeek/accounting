@@ -27,7 +27,7 @@ accounts = OpenStruct.new(
 date = Date.current
 subscription = org.subscription
 
-Ethereum::Block.create(network: "holesky", slot: 1309248)
+# Ethereum::Block.create(network: "holesky", slot: 1309248)
 
 # Reward.create!(amount: 150, paid_to: accounts.ocb_eth, subscription:, org:, date:)
 # Reward.create!(amount: 250, paid_to: accounts.unswept_rewards, subscription:, org:, date:)

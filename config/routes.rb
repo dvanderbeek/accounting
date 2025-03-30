@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post '/earn_reward', to: 'home#earn_reward', as: :simulate_reward
   post '/pay_fee', to: 'home#pay_fee', as: :simulate_fee_payment
   post '/sweep', to: 'home#sweep', as: :simulate_sweep
+  post '/payout', to: 'home#payout', as: :trigger_payout
 
   namespace :webhooks do
     namespace :quick_node do

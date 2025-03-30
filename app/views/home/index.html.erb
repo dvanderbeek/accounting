@@ -3,9 +3,12 @@
     Rewards Overview: <%= @org.name %>
   </h1>
 
-  <%= button_to "Simulate Reward", simulate_reward_path, method: :post, class: 'btn btn-primary mb-3' %>
+  <%= button_to "Simulate CL Reward", simulate_reward_path(type: "consensus"), method: :post, class: 'btn btn-primary mb-3' %>
+  <%= button_to "Simulate EL Reward", simulate_reward_path(type: "execution"), method: :post, class: 'btn btn-primary mb-3' %>
+  <%= button_to "Simulate EL Reward (coinbase / self-destruct refund)", simulate_reward_path(type: "execution", coinbase: "true"), method: :post, class: 'btn btn-primary mb-3' %>
   <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary mb-3' %>
   <%= button_to "Simulate Reward Sweep", simulate_sweep_path, method: :post, class: 'btn btn-primary mb-3' %>
+  <%= button_to "Trigger OCB Payout", trigger_payout_path, method: :post, class: 'btn btn-primary mb-3' %>
 
   <table class="table table-bordered table-striped shadow-sm rounded bg-white">
     <thead class="thead-light">
@@ -139,13 +142,13 @@
     </div>
 
     <div class="card-body">
-      <p class="card-text h4">Tab: <%= @ocb_contract.tab %> ETH</p>
+      <p class="card-text h4">Balance: <%= @org.accounts_by_name.ocb_eth.balance %> ETH</p>
 
       <h6>Rewards Received</h6>
       <ul class="list-group">
         <% Reward.where(paid_to: @org.accounts_by_name.ocb_eth).find_each do |reward| %>
           <li class="list-group-item">
-            <%= reward.date %>: <%= reward.amount %> ETH
+            <%= reward.date %>: <%= reward.amount %> ETH <%= "(coinbase)" if reward.coinbase? %>
           </li>
         <% end %>
       </ul>

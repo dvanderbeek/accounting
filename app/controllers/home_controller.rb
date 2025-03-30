@@ -1,6 +1,9 @@
 class HomeController < ApplicationController
+  before_action :load_org
+
+  attr_reader :org
+
   def index
-    @org = Org.first
     @statement = Statement.new(
       start_date: Date.new(2024, 03, 01).beginning_of_month,
       end_date: Date.current,
@@ -12,12 +15,11 @@ class HomeController < ApplicationController
   end
 
   def earn_reward
-    org = Org.first
     amount = (10..300).to_a.sample
-    paid_to = [org.accounts_by_name.ocb_eth, org.accounts_by_name.unswept_rewards].sample
+    paid_to = params[:type] == "execution" ? org.accounts_by_name.ocb_eth : org.accounts_by_name.unswept_rewards
     subscription = org.subscription
     date = Date.current
-    coinbase = ([false] * 9 + [true]).sample
+    coinbase = params[:coinbase] == "true"
 
     Reward.create!(amount:, paid_to:, subscription:, org:, date:, coinbase:)
 
@@ -25,7 +27,6 @@ class HomeController < ApplicationController
   end
 
   def pay_fee
-    org = Org.first
     date = Date.current
     amount = org.accounts_by_name.accrued_service_fees.balance
 
@@ -35,10 +36,22 @@ class HomeController < ApplicationController
   end
 
   def sweep
-    org = Org.first
-
     Sweep.create!(org:)
 
     redirect_to root_path
+  end
+
+  def payout
+    onchain_billing_contract = OnchainBilling::Contract.where(org:).first
+
+    onchain_billing_contract.payout!(org.balance_owed)
+
+    redirect_to root_path
+  end
+
+  private
+
+  def load_org
+    @org ||= Org.first
   end
 end

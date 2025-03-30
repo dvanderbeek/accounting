@@ -1,7 +1,7 @@
 class Reward < ApplicationRecord
   include OcbScopes
 
-  attr_accessor :subscription, :coinbase
+  attr_accessor :subscription
   belongs_to :paid_to, class_name: 'Plutus::Account'
 
   belongs_to :org
@@ -36,7 +36,7 @@ class Reward < ApplicationRecord
     # Simulate the OCB Contract getting a payment
     # TODO: Do this by indexing payouts rather than assuming it hapens when a non-coinbase OCB reward is earned
     if paid_to.name == 'ocb_eth' && !coinbase
-      onchain_billing_contract.process_transfer(self)
+      onchain_billing_contract.payout!(org.balance_owed)
     end
   end
 
