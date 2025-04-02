@@ -1,2 +1,31 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+.timeline {
+  position: relative;
+  height: 400px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.timeline-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.activity-section {
+  height: 100%;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+// Custom badge colors
+.bg-purple {
+  background-color: #6f42c1;
+  color: white;
+}

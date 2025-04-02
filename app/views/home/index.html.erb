@@ -1,14 +1,78 @@
 <div class="container pt-5">
-  <h1 class="h2">
+  <h1 class="h2 mb-4">
     Rewards Overview: <%= @org.name %>
   </h1>
 
-  <%= button_to "Simulate CL Reward", simulate_reward_path(type: "consensus"), method: :post, class: 'btn btn-primary mb-3' %>
-  <%= button_to "Simulate EL Reward", simulate_reward_path(type: "execution"), method: :post, class: 'btn btn-primary mb-3' %>
-  <%= button_to "Simulate EL Reward (coinbase / self-destruct refund)", simulate_reward_path(type: "execution", coinbase: "true"), method: :post, class: 'btn btn-primary mb-3' %>
-  <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary mb-3' %>
-  <%= button_to "Simulate Reward Sweep", simulate_sweep_path, method: :post, class: 'btn btn-primary mb-3' %>
-  <%= button_to "Trigger OCB Payout", trigger_payout_path, method: :post, class: 'btn btn-primary mb-3' %>
+  <div class="d-flex flex-wrap gap-2 mb-2">
+    <%= button_to "Simulate CL Reward", simulate_reward_path(type: "consensus"), method: :post, class: 'btn btn-primary' %>
+    <%= button_to "Simulate EL Reward (transfer)", simulate_reward_path(type: "execution"), method: :post, class: 'btn btn-primary' %>
+    <%= button_to "Simulate EL Reward (coinbase / self-destruct refund)", simulate_reward_path(type: "execution", coinbase: "true"), method: :post, class: 'btn btn-primary' %>
+  </div>
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary' %>
+    <%= button_to "Simulate Reward Sweep", simulate_sweep_path, method: :post, class: 'btn btn-primary' %>
+    <%= button_to "Trigger OCB Payout", trigger_payout_path, method: :post, class: 'btn btn-primary' %>
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+      <h3 class="h5 mb-0">Activity</h3>
+    </div>
+
+    <div class="card-body">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-wallet me-2"></i>
+        <h4 class="mb-0">Balance: <%= @org.accounts_by_name.ocb_eth.balance %> ETH</h4>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="activity-section">
+            <h5 class="border-bottom pb-2 mb-3">
+              <i class="fas fa-arrow-down text-success me-2"></i>
+              Rewards Received
+            </h5>
+            <%= turbo_frame_tag "rewards_timeline" do %>
+              <%= render "activity_timeline",
+                        items: @rewards,
+                        param_name: 'rewards_page',
+                        type: :reward %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="activity-section">
+            <h5 class="border-bottom pb-2 mb-3">
+              <i class="fas fa-arrow-up text-primary me-2"></i>
+              OCB Payouts
+            </h5>
+            <%= turbo_frame_tag "payouts_timeline" do %>
+              <%= render "activity_timeline",
+                        items: @payouts,
+                        param_name: 'payouts_page',
+                        type: :payout %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="activity-section">
+            <h5 class="border-bottom pb-2 mb-3">
+              <i class="fas fa-money-bill text-warning me-2"></i>
+              Fee Payments
+            </h5>
+            <%= turbo_frame_tag "fee_payments_timeline" do %>
+              <%= render "activity_timeline",
+                        items: @fee_payments,
+                        param_name: 'fees_page',
+                        type: :fee %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <table class="table table-bordered table-striped shadow-sm rounded bg-white">
     <thead class="thead-light">
@@ -135,41 +199,42 @@
       </tr>
     </tbody>
   </table>
-
-  <div class="card">
-    <div class="card-header">
-      OCB Contract
-    </div>
-
-    <div class="card-body">
-      <p class="card-text h4">Balance: <%= @org.accounts_by_name.ocb_eth.balance %> ETH</p>
-
-      <h6>Rewards Received</h6>
-      <ul class="list-group">
-        <% Reward.where(paid_to: @org.accounts_by_name.ocb_eth).find_each do |reward| %>
-          <li class="list-group-item">
-            <%= reward.date %>: <%= reward.amount %> ETH <%= "(coinbase)" if reward.coinbase? %>
-          </li>
-        <% end %>
-      </ul>
-
-      <h6>Payouts</h6>
-      <ul class="list-group">
-        <% OcbPayout.find_each do |payout| %>
-          <li class="list-group-item">
-            <%= payout.date %>: <%= payout.amount %> ETH
-          </li>
-        <% end %>
-      </ul>
-
-      <h6>Fee Payments</h6>
-      <ul class="list-group">
-        <% FeePayment.where(from_account: @org.accounts_by_name.ocb_eth).find_each do |payment| %>
-          <li class="list-group-item">
-            <%= payment.date %>: <%= payment.amount %> ETH
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
 </div>
+
+<style>
+.timeline {
+  position: relative;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.timeline-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.activity-section {
+  height: 100%;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.pagination {
+  margin: 0;
+}
+
+.pagination a, .pagination span {
+  padding: 0.25rem 0.5rem;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+.pagination a {
+  text-decoration: none;
+}
+</style>

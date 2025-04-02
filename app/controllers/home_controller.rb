@@ -12,6 +12,17 @@ class HomeController < ApplicationController
     @unswept_rewards = @statement.unswept_rewards
     @gross_rewards_received = @statement.gross_rewards_received
     @ocb_contract = OnchainBilling::Contract.find_by(org: @org)
+
+    # Add pagination with 10 items per page
+    @rewards = Reward.order(created_at: :desc)
+                    .includes(:paid_to)
+                    .paginate(page: params[:rewards_page], per_page: 5)
+
+    @payouts = OcbPayout.order(created_at: :desc)
+                        .paginate(page: params[:payouts_page], per_page: 5)
+
+    @fee_payments = FeePayment.order(created_at: :desc)#.where(from_account: @org.accounts_by_name.ocb_eth)
+                             .paginate(page: params[:fees_page], per_page: 5)
   end
 
   def earn_reward

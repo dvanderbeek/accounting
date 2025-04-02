@@ -17,8 +17,6 @@ class FeePayment < ApplicationRecord
         { amount: amount, account: from_account }
       ]
     )
-
-    # onchain_billing_contract.update_tab
   end
 
   private
