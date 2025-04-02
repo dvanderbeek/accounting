@@ -8,14 +8,17 @@
           <% when :reward %>
             <span class="badge <%= reward_badge_class(item) %>">
               <%= item.amount %> ETH
-              <%= "EL" if item.paid_to.name == 'ocb_eth' %>
-              <%= "CL" if item.paid_to.name == 'unswept_rewards' %>
+              <%= "(EL)" if item.paid_to.name == 'ocb_eth' %>
+              <%= "(CL)" if item.paid_to.name == 'unswept_rewards' %>
               <%= "(coinbase)" if item.coinbase? %>
             </span>
           <% when :payout %>
             <span class="badge bg-primary"><%= item.amount %> ETH</span>
           <% when :fee %>
-            <span class="badge bg-warning text-dark"><%= item.amount %> ETH</span>
+            <span class="badge bg-warning text-dark">
+              <%= item.amount %> ETH
+              <%= item.ocb? ? '(ONB)' : '(Direct)' %>
+            </span>
           <% end %>
         </div>
       </div>

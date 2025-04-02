@@ -83,7 +83,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_054710) do
     t.string "type"
     t.integer "account_id"
     t.integer "entry_id"
-    t.bigint "amount"
+    t.decimal "amount", precision: 20, scale: 10
     t.index ["account_id", "entry_id"], name: "index_plutus_amounts_on_account_id_and_entry_id"
     t.index ["entry_id", "account_id"], name: "index_plutus_amounts_on_entry_id_and_account_id"
     t.index ["type"], name: "index_plutus_amounts_on_type"

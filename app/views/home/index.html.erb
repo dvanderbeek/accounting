@@ -1,17 +1,38 @@
 <div class="container pt-5">
   <h1 class="h2 mb-4">
-    Rewards Overview: <%= @org.name %>
+    Rewards Overview
   </h1>
 
-  <div class="d-flex flex-wrap gap-2 mb-2">
-    <%= button_to "Simulate CL Reward", simulate_reward_path(type: "consensus"), method: :post, class: 'btn btn-primary' %>
-    <%= button_to "Simulate EL Reward (transfer)", simulate_reward_path(type: "execution"), method: :post, class: 'btn btn-primary' %>
-    <%= button_to "Simulate EL Reward (coinbase / self-destruct refund)", simulate_reward_path(type: "execution", coinbase: "true"), method: :post, class: 'btn btn-primary' %>
+  <div class="alert alert-light border-start border-primary mb-4">
+    <h4 class="alert-heading h5 mb-2">Simulation Buttons</h4>
+    <p>These buttons simulate on-chain events that would need to be indexed (or off-chain data that would need to be imported in the case of fee payments). By translating these events into proper accounting journal entries, we maintain a clear audit trail of fund flows and can accurately calculate all the metrics shown in the statements below.</p>
+    <p class="mb-0">This demo focuses on Ethereum, but the same architecture can be used for any protocol. We just need to identify the events to track and the proper accounting entries for each.</p>
   </div>
-  <div class="d-flex flex-wrap gap-2 mb-4">
-    <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary' %>
-    <%= button_to "Simulate Reward Sweep", simulate_sweep_path, method: :post, class: 'btn btn-primary' %>
-    <%= button_to "Trigger OCB Payout", trigger_payout_path, method: :post, class: 'btn btn-primary' %>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <h6 class="mb-2">CL Rewards</h6>
+      <div class="d-flex flex-column gap-2">
+        <%= button_to "Simulate CL Reward", simulate_reward_path(type: "consensus"), method: :post, class: 'btn btn-primary btn-sm' %>
+        <%= button_to "Simulate Reward Sweep", simulate_sweep_path, method: :post, class: 'btn btn-primary btn-sm' %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="mb-2">EL Rewards</h6>
+      <div class="d-flex flex-column gap-2">
+        <%= button_to "Simulate EL Reward (transfer)", simulate_reward_path(type: "execution"), method: :post, class: 'btn btn-primary btn-sm' %>
+        <%= button_to "Simulate EL Reward (coinbase / self-destruct refund)", simulate_reward_path(type: "execution", coinbase: "true"), method: :post, class: 'btn btn-primary btn-sm' %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="mb-2">Fee Payments</h6>
+      <div class="d-flex flex-column gap-2">
+        <%= button_to "Simulate Off-chain Fee Payment", simulate_fee_payment_path, method: :post, class: 'btn btn-primary btn-sm' %>
+        <%= button_to "Trigger OCB Payout", trigger_payout_path, method: :post, class: 'btn btn-primary btn-sm' %>
+      </div>
+    </div>
   </div>
 
   <div class="card shadow-sm mt-4">
@@ -30,7 +51,7 @@
           <div class="activity-section">
             <h5 class="border-bottom pb-2 mb-3">
               <i class="fas fa-arrow-down text-success me-2"></i>
-              Rewards Received
+              Rewards
             </h5>
             <%= turbo_frame_tag "rewards_timeline" do %>
               <%= render "activity_timeline",
@@ -45,7 +66,7 @@
           <div class="activity-section">
             <h5 class="border-bottom pb-2 mb-3">
               <i class="fas fa-arrow-up text-primary me-2"></i>
-              OCB Payouts
+              Onchain Billing Payouts
             </h5>
             <%= turbo_frame_tag "payouts_timeline" do %>
               <%= render "activity_timeline",

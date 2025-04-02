@@ -21,8 +21,9 @@ class HomeController < ApplicationController
     @payouts = OcbPayout.order(created_at: :desc)
                         .paginate(page: params[:payouts_page], per_page: 5)
 
-    @fee_payments = FeePayment.order(created_at: :desc)#.where(from_account: @org.accounts_by_name.ocb_eth)
-                             .paginate(page: params[:fees_page], per_page: 5)
+    @fee_payments = FeePayment.order(created_at: :desc)
+                              .includes(:from_account)
+                              .paginate(page: params[:fees_page], per_page: 5)
   end
 
   def earn_reward

@@ -19,6 +19,10 @@ class FeePayment < ApplicationRecord
     )
   end
 
+  def ocb?
+    from_account.name == 'ocb_eth'
+  end
+
   private
 
   def accounts
