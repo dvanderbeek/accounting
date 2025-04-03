@@ -8,6 +8,7 @@
           <% when :reward %>
             <span class="badge <%= reward_badge_class(item) %>">
               <%= item.amount %> ETH
+              <%= "(Direct)" if item.paid_to.name == 'rewards' %>
               <%= "(EL)" if item.paid_to.name == 'ocb_eth' %>
               <%= "(CL)" if item.paid_to.name == 'unswept_rewards' %>
               <%= "(coinbase)" if item.coinbase? %>

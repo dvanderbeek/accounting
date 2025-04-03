@@ -28,7 +28,11 @@ class HomeController < ApplicationController
 
   def earn_reward
     amount = (10..300).to_a.sample
-    paid_to = params[:type] == "execution" ? org.accounts_by_name.ocb_eth : org.accounts_by_name.unswept_rewards
+    paid_to = if params[:type] == "execution"
+                params[:ocb] == "false" ? org.accounts_by_name.rewards : org.accounts_by_name.ocb_eth
+              else
+                org.accounts_by_name.unswept_rewards
+              end
     subscription = org.subscription
     date = Date.current
     coinbase = params[:coinbase] == "true"

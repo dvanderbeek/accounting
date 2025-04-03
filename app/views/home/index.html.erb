@@ -23,6 +23,7 @@
       <div class="d-flex flex-column gap-2">
         <%= button_to "Simulate EL Reward (transfer)", simulate_reward_path(type: "execution"), method: :post, class: 'btn btn-primary btn-sm' %>
         <%= button_to "Simulate EL Reward (coinbase / self-destruct refund)", simulate_reward_path(type: "execution", coinbase: "true"), method: :post, class: 'btn btn-primary btn-sm' %>
+        <%= button_to "Simulate EL Reward (non-OCB)", simulate_reward_path(type: "execution", ocb: false), method: :post, class: 'btn btn-primary btn-sm' %>
       </div>
     </div>
 
@@ -41,9 +42,9 @@
     </div>
 
     <div class="card-body">
-      <div class="d-flex align-items-center mb-4">
-        <i class="fas fa-wallet me-2"></i>
-        <h4 class="mb-0">Balance: <%= @org.accounts_by_name.ocb_eth.balance %> ETH</h4>
+      <div class="mb-4">
+        <h5>OCB Balance: <small><%= @org.accounts_by_name.ocb_eth.balance %> ETH</small></h5>
+        <h5 class="mb-0">Fees Owed: <small><%= @statement.balance %></small></h5>
       </div>
 
       <div class="row">
